@@ -1,0 +1,27 @@
+username: ska.arya173@gmail.com
+password: 8HferH2NntUMxS
+
+positions:
+  - Python Software Engineer
+  - Python
+  - Investment
+  - Finance
+  - Analyst
+  - Data
+
+locations:
+  - San Francisco
+  - New York
+
+# --------- Optional Parameters -------
+uploads:
+  Resume: /Users/saurabharya/Documents/Github/LinkedIn-Easy-Apply-Bot-master/Saurabh CV.pdf
+  Cover Letter: /Users/saurabharya/Documents/Github/LinkedIn-Easy-Apply-Bot-master/Saurabh Cover Letter.pdf
+# output_filename:
+# - # PATH TO OUTPUT FILE (default output.csv)
+
+# blacklist:
+# - # Company names you want to ignore
+
+blackListTitles:
+  - Remote
