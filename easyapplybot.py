@@ -1,10 +1,20 @@
-# Load packages
+# Load general packages
 import time
 import random
 import os
 import csv
 import platform
 import logging
+import pandas as pd
+import pyautogui
+from urllib.request import urlopen
+from webdriver_manager.chrome import ChromeDriverManager
+import re
+import yaml
+from datetime import datetime, timedelta
+
+
+# Load packages required to control chrome
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.common.exceptions import TimeoutException
@@ -14,17 +24,11 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from bs4 import BeautifulSoup
-import pandas as pd
-import pyautogui
 
-from urllib.request import urlopen
-from webdriver_manager.chrome import ChromeDriverManager
-import re
-import yaml
-from datetime import datetime, timedelta
-
+# Load python file that contains keys
 import linkedin_keys
 
+# Log all information
 log = logging.getLogger(__name__)
 driver = webdriver.Chrome(ChromeDriverManager().install())
 
@@ -49,9 +53,10 @@ def setupLogger():
 
 class EasyApplyBot:
     setupLogger()
-    # MAX_SEARCH_TIME is 10 hours by default, feel free to modify it
+    # Max search time 10 hours
     MAX_SEARCH_TIME = 10 * 60 * 60
 
+    # Initialising the bot
     def __init__(self,
                  username,
                  password,
@@ -75,6 +80,7 @@ class EasyApplyBot:
         self.blackListTitles = blackListTitles
         self.start_linkedin(linkedin_keys.username, linkedin_keys.password)
 
+    # Retrieve all the applications and associate an ID
     def get_appliedIDs(self, filename):
         try:
             df = pd.read_csv(filename,
@@ -102,7 +108,7 @@ class EasyApplyBot:
         options.add_argument('--no-sandbox')
         options.add_argument("--disable-extensions")
 
-        # Disable webdriver flags or you will be easily detectable
+        # Disable webdriver flags to not be detectable
         options.add_argument("--disable-blink-features")
         options.add_argument("--disable-blink-features=AutomationControlled")
         return options
@@ -111,7 +117,10 @@ class EasyApplyBot:
         log.info("Logging in.....Please wait :)  ")
         self.browser.get(
             "https://www.linkedin.com/login?trk=guest_homepage-basic_nav-header-signin")
+
+        # Error handling for log-in
         try:
+            # Retrieve the keys from the external file
             user_field = self.browser.find_element(by=By.ID, value="username")
             pw_field = self.browser.find_element(by=By.ID, value="password")
             login_button = self.browser.find_element(
@@ -147,8 +156,6 @@ class EasyApplyBot:
                 self.applications_loop(position, location)
             if len(combos) > 500:
                 break
-
-    # self.finish_apply() --> this does seem to cause more harm than good, since it closes the browser which we usually don't want, other conditions will stop the loop and just break out
 
     def applications_loop(self, position, location):
 
