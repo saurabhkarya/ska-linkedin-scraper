@@ -23,6 +23,8 @@ import re
 import yaml
 from datetime import datetime, timedelta
 
+import linkedin_keys
+
 log = logging.getLogger(__name__)
 driver = webdriver.Chrome(ChromeDriverManager().install())
 
@@ -71,7 +73,7 @@ class EasyApplyBot:
         self.wait = WebDriverWait(self.browser, 30)
         self.blacklist = blacklist
         self.blackListTitles = blackListTitles
-        self.start_linkedin(username, password)
+        self.start_linkedin(linkedin_keys.username, linkedin_keys.password)
 
     def get_appliedIDs(self, filename):
         try:
